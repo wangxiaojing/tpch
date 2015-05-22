@@ -100,6 +100,57 @@ print_prep(int table, int update)
 }
 
 int
+dbg_print_last(int format, FILE *target, void *data, int len, int sep)
+{
+    int dollars,
+        cents;
+
+    switch (format)
+    {
+    case DT_STR:
+        fprintf(target, "%s", (char *)data);
+        break;
+#ifdef MVS
+    case DT_VSTR:
+        /* note: only used in MVS, assumes columnar output */
+        fprintf(target, "%c%c%-*s",
+            (len >> 8) & 0xFF, len & 0xFF, len, (char *)data);
+        break;
+#endif /* MVS */
+    case DT_INT:
+        fprintf(target, "%ld", (long)data);
+        break;
+    case DT_HUGE:
+        fprintf(target, HUGE_FORMAT, *(DSS_HUGE *)data);
+        break;
+    case DT_KEY:
+        fprintf(target, "%ld", (long)data);
+        break;
+    case DT_MONEY:
+        cents = (int)*(DSS_HUGE *)data;
+        if (cents < 0)
+        {
+            fprintf(target, "-");
+            cents = -cents;
+        }
+        dollars = cents / 100;
+        cents %= 100;
+        fprintf(target, "%ld.%02ld", dollars, cents);
+        break;
+    case DT_CHR:
+        fprintf(target, "%c", *(char *)data);
+        break;
+    }
+
+#ifdef EOL_HANDLING
+    if (sep)
+#endif /* EOL_HANDLING */
+        //fprintf(target, "%c", SEPARATOR);
+        //
+	    return(0);
+}
+
+int
 dbg_print(int format, FILE *target, void *data, int len, int sep)
 {
 	int dollars,
