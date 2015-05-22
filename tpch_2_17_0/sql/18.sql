@@ -1,33 +1,32 @@
 explain
 select
-	c_name,
-	c_custkey,
-	o_orderkey,
-	o_orderdate,
-	o_totalprice,
-	sum(l_quantity)
+         p_brand,
+         p_type,
+         p_size,
+         count(distinct ps_suppkey) as supplier_cnt
 from
-	customer,
-	orders,
-	lineitem
+         partsupp,
+         part,
+         (
+                   select
+                       s_suppkey m_s_suppkey
+                   from
+                            supplier
+                   where
+                            s_comment like '%Customer%Complaints%'
+         ) v
 where
-	o_orderkey in (
-		select
-			l_orderkey
-		from
-			lineitem
-		group by
-			l_orderkey having
-				sum(l_quantity) > 300
-	)
-	and c_custkey = o_custkey
-	and o_orderkey = l_orderkey
+         p_partkey = ps_partkey
+         and p_brand <> 'Brand#45'
+         and p_type not like 'MEDIUM POLISHED%'
+         and p_size in (49, 14, 23, 45, 19, 3, 36, 9)
+         and (ps_suppkey = v.m_s_suppkey or ps_suppkey != v.m_s_suppkey)
 group by
-	c_name,
-	c_custkey,
-	o_orderkey,
-	o_orderdate,
-	o_totalprice
+         p_brand,
+         p_type,
+         p_size
 order by
-	o_totalprice desc,
-	o_orderdate;
+         supplier_cnt desc,
+         p_brand,
+         p_type,
+         p_size;

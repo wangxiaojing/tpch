@@ -1,4 +1,4 @@
-explain
+#explain
 select
 	l_returnflag,
 	l_linestatus,
@@ -13,10 +13,11 @@ select
 from
 	lineitem
 where
-	l_shipdate <= '1998-09-01' 
+	l_shipdate <= '1998-09-02' 
 group by
 	l_returnflag,
 	l_linestatus
 order by
 	l_returnflag,
 	l_linestatus;
+

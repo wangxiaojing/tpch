@@ -1,4 +1,3 @@
-explain
 select
 	supp_nation,
 	cust_nation,
@@ -9,7 +8,9 @@ from
 		select
 			n1.n_name as supp_nation,
 			n2.n_name as cust_nation,
-			extract(year from l_shipdate) as l_year,
+			case 
+			when l_shipdate  between '1995-01-01' and '1996-12-31' then '1995'
+		else '1996' end as l_year,
 			l_extendedprice * (1 - l_discount) as volume
 		from
 			supplier,
@@ -28,7 +29,7 @@ from
 				(n1.n_name = 'FRANCE' and n2.n_name = 'GERMANY')
 				or (n1.n_name = 'GERMANY' and n2.n_name = 'FRANCE')
 			)
-			and l_shipdate between date '1995-01-01' and date '1996-12-31'
+			and l_shipdate between '1995-01-01' and  '1996-12-31'
 	) as shipping
 group by
 	supp_nation,

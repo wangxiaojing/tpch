@@ -1,4 +1,3 @@
-explain
 select
 	n_name,
 	sum(l_extendedprice * (1 - l_discount)) as revenue
@@ -18,8 +17,9 @@ where
 	and n_regionkey = r_regionkey
 	and r_name = 'ASIA'
 	and o_orderdate >= date '1994-01-01'
-	and o_orderdate < date '1994-01-01' + interval '1' year
+	and o_orderdate < date '1995-01-01' 
 group by
 	n_name
 order by
 	revenue desc;
+

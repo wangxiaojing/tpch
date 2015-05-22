@@ -1,4 +1,3 @@
-explain
 select
 	l_orderkey,
 	sum(l_extendedprice * (1 - l_discount)) as revenue,
@@ -21,3 +20,4 @@ group by
 order by
 	revenue desc,
 	o_orderdate;
+
