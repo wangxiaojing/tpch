@@ -17,11 +17,12 @@
  - cd dbgen
  - cp makefile.suite makefile
  - 修改makefile
-`CC =  GCC  # 使用GCC编辑
-        # Current values for DATABASE are: INFORMIX, DB2, TDAT (Teradata)
-        # SQLSERVER, SYBASE, ORACLE, VECTORWISE
-        # Current values for MACHINE are: ATT, DOS, HP, IBM, ICL, MVS,SGI, SUN, U2200, VMS, LINUX, WIN32
-        # Current values for WORKLOAD are: TPCH
+`CC =  GCC  
+# 使用GCC编辑
+# Current values for DATABASE are: INFORMIX, DB2, TDAT (Teradata)
+# SQLSERVER, SYBASE, ORACLE, VECTORWISE
+# Current values for MACHINE are: ATT, DOS, HP, IBM, ICL, MVS,SGI, SUN, U2200, VMS, LINUX, WIN32
+# Current values for WORKLOAD are: TPCH
 DATABASE=  SQLSERVER    #数据类型
 MACHINE = LINUX         #机器环境
 WORKLOAD =TPCH  `
@@ -35,6 +36,7 @@ qgen:用于生成测试数据的sql语句,现在有22条查询,2条更新
             
 TPC-H数据库的组成被定义为由八个单独的表（基本表）组成,分别时part、 partuspp、 customer 、supplier 、orders、 lineitem 、nation、 nation,除Nation 和Region 表外，其它表与测试的数据量有关，即比例因SF。
    **参数说明：**
+
 `dbgen [-{vf}][-T {pcsoPSOL}]
         [-s <scale>][-C <procs>][-S <step>]
 dbgen [-v] [-O m] [-s <scale>] [-U <updates>]
@@ -48,8 +50,11 @@ dbgen [-v] [-O m] [-s <scale>] [-U <updates>]
 -v     -- enable VERBOSE mode
 -T table  Generate the data for a particular table 
     ONLY. Arguments: p -- part/partuspp,c -- customer, s -- supplier, o -- orders/lineitem, n -- nation, r -- region,l -- code (same as n and r), O -- orders, L -- lineitem, P -- part, S -- partsupp`
+    
 *举例说明*：dbgen 生成100中第一个10G的customer表
+
 `dbgen -S 1 -s 10 -T c -C 100 -v ` 
+
 这里边的S 和C需要配合使用
 
   
@@ -57,7 +62,7 @@ dbgen [-v] [-O m] [-s <scale>] [-U <updates>]
         在实际测试环境中，生成30G数据，并将元数据分成10个分片。
         具体操作:`dbgen -S 1 -s 30  -C 10 -v` 
         创建脚本create_data.sh实现生成数据，并上传到集群/data目录
-        >*create_data.sh*
+   >*create_data.sh*
         `for i in $(seq 10)
 do
 ./dbgen -S $i -s 30  -C 10 -v  
